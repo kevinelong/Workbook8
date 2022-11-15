@@ -1,0 +1,73 @@
+<head>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <a href="index.html"> Home </a>
+    <a href="todo.html"> Find a Todo </a>
+    <a href="new-todo.html"> New Todo </a>
+    <a href="edit-todo.html"> Edit Todo </a>
+
+    <fieldset>
+        <legend>TODO</legend>
+        <label>
+            User Id: <input type="text" id="userId" value="1">
+        </label>
+        <br>
+        <label>
+            Title: <input type="text" id="title" value="New Todo">
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="completed"> Completed
+        </label>
+        <br><br>
+        <button id="add"> Add </button>
+    </fieldset>
+</body>
+<script>
+    /*  {
+        "userId": 1,
+        "id": 1,
+        "title": "delectus aut autem",
+        "completed": false
+      },  */
+    const add = document.getElementById("add");
+    const title = document.getElementById("title");
+    const completed = document.getElementById("completed");
+    const userId = document.getElementById("userId");
+
+    add.addEventListener("click", e => {
+
+        const data = { //CREATE NEW OBJECT
+            userID: userId.value,
+            title: title.value,
+            completed: completed.checked
+        };
+
+        const textJSON = JSON.stringify(data);
+
+        fetch("https://jsonplaceholder.typicode.com/todos", {
+            method: "POST",
+            body: textJSON,
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+            .then(
+                response => response.json()
+            )
+            .then(json => {
+                const pre = document.createElement("pre");
+                pre.innerHTML += `<pre>${JSON.stringify(json, undefined, 4)}</pre>`;
+                document.body.appendChild(pre);
+                // If the POST finishes successfully, ... 
+            })
+            .catch(err => {
+                // If the POST returns an error, ... 
+            });
+
+
+
+    }); // END CLICK LISTENER
+</script>

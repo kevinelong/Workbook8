@@ -1,63 +1,83 @@
+<head>
+    <link rel="stylesheet" href="main.css">
+</head>
 <body>
+    <a href="index.html"> Home </a>
+    <a href="todo.html"> Find a Todo </a>
+    <a href="new-todo.html"> New Todo </a>
+    <a href="edit-todo.html"> Edit Todo </a>
+<hr>
+    ID TO EDIT <input id="findId" value="1">
+    <button id="edit"> Edit </button>
+    <hr>
     <fieldset>
-        <legend>TODO</legend>
+        <legend> EDIT TODO</legend>
         <label>
-            User Id: <input type="text" id="userId" value="1">
+            TODO Id: <input type="text" id="todoId" value="" readonly><br>
+        </label>
+        <label>
+            User Id: <input type="text" id="userId" value="">
         </label>
         <br>
         <label>
-            Title: <input type="text" id="title" value="New Todo">
+            Title: <input type="text" id="title" value="">
         </label>
         <br>
         <label>
             <input type="checkbox" id="completed"> Completed
         </label>
         <br><br>
-        <button id="add"> Add </button>
+        <button id="update"> UPDATE </button>
     </fieldset>
+
+    <a href="index.html">
+        <button id="cancel"> CANCEL </button>
+    </a>
+
 </body>
 <script>
-/*  {
-    "userId": 1,
-    "id": 1,
-    "title": "delectus aut autem",
-    "completed": false
-  },  */
-  const add = document.getElementById("add");
-  const title = document.getElementById("title");
-  const completed = document.getElementById("completed");
-  const userId = document.getElementById("userId");
-  
-  add.addEventListener("click", e=>{
+    const findId = document.getElementById("findId");
 
-    const data = { //CREATE NEW OBJECT
-        userID: userId.value,
-        title: title.value,
-        completed: completed.checked
-    };
+    const todoId = document.getElementById("todoId");
+    const title = document.getElementById("title");
+    const completed = document.getElementById("completed");
+    const userId = document.getElementById("userId");
 
-    const textJSON = JSON.stringify(data);
+    document.getElementById("edit").addEventListener("click", e => {
+        fetch("https://jsonplaceholder.typicode.com/todos/" + findId.value)
+            .then(response => response.json())
+            .then(json => {
+                todoId.value = json.id;
+                title.value = json.title;
+                userId.value = json.userId;
+                completed.checked = json.completed;
 
-    fetch("https://jsonplaceholder.typicode.com/todos", { 
-        method: "POST",
-        body: textJSON, 
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-     })
-     .then(
-        response => response.json()
-        ) 
-     .then(json => { 
-        document.body.innerHTML += `<pre>${JSON.stringify(json,undefined,4)}</pre>`
+                const pre = document.createElement("pre");
+                pre.innerHTML += `<pre>${JSON.stringify(json, undefined, 4)}</pre>`;
+                document.body.appendChild(pre);
+            });
+    }); // END CLICK LISTENER
 
-        // If the POST finishes successfully, ... 
-     })
-     .catch(err => { 
-        // If the POST returns an error, ... 
-    });
-
-    
-    
-  }); // END CLICK LISTENER
+    //UPDATE
+    document.getElementById("update").addEventListener("click", e => {
+        //NOTE WE MUST INCLUDE THE ID IN THE URL/ENDPOINT
+        fetch("https://jsonplaceholder.typicode.com/todos/" + todoId.value, {
+            method: "PUT", //PUT FOR UPDATE INSTEAD OF POST FOR NEW
+            body: JSON.stringify({ //CREATE NEW OBJECT
+                id: todoId.value,
+                userID: userId.value,
+                title: title.value,
+                completed: completed.checked
+            }),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        })
+            .then(
+                response => response.json()
+            )
+            .then(json => {
+                const pre = document.createElement("pre");
+                pre.innerHTML += `<pre>${JSON.stringify(json, undefined, 4)}</pre>`;
+                document.body.appendChild(pre);
+            });
+    }); // END CLICK LISTENER
 </script>

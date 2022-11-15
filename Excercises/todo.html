@@ -1,0 +1,38 @@
+<head>
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <a href="index.html"> Home </a>
+  <a href="todo.html"> Find a Todo </a>
+  <a href="new-todo.html"> New Todo </a>
+  <a href="edit-todo.html"> Edit Todo </a>
+
+  <h1> Find TODO by ID</h1>
+  <label> TODO ID:
+    <input id="todoId" value="1">
+  </label>
+  <button id="find"> Find Todo </button>
+</body>
+<script>
+  const todoId = document.getElementById("todoId");
+  const find = document.getElementById("find");
+
+  find.addEventListener("click", e => {
+    const id = todoId.value;
+
+    fetch("https://jsonplaceholder.typicode.com/todos/" + id)
+      .then(
+        response => response.json()
+      )
+      .then(json => {
+        const pre = document.createElement("pre");
+        pre.innerHTML += `<pre>${JSON.stringify(json, undefined, 4)}</pre>`;
+        document.body.appendChild(pre);
+        // If the POST finishes successfully, ... 
+      })
+      .catch(err => {
+        // If the POST returns an error, ... 
+      });
+  }); // END CLICK LISTENER
+</script>
