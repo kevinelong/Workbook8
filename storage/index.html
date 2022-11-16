@@ -1,0 +1,30 @@
+<body>
+    <form>
+        <label>
+            User Name:<br>
+            <input id="userName" placeholder="Enter User Name" value="Kevin">
+        </label><br>
+        <fieldset>
+            <legend>Kind:</legend>
+            <label>
+                <input type="radio" name="kind" value="instructor" checked> <span> Instructor </span>
+            </label><br>
+            <label>
+                <input type="radio" name="kind" value="student"> <span> Student </span>
+            </label><br>
+        </fieldset>
+    </form>
+    <button id="enter" style="font-size:2em;padding:1em;"> ENTER </button>
+</body>
+<script>
+    document.getElementById("enter").addEventListener("click", e => {
+        localStorage.userName = document.getElementById("userName").value;
+        localStorage.kind = document.forms[0].elements['kind'].value;
+
+        // localStorage.setItem("userName", document.getElementById("userName").value);
+        // localStorage.setItem("kind",  document.forms[0].elements['kind'].value);
+        // self.location = "information.html";
+        // location.href = "information.html";
+        location = "information.html";
+    });
+</script>
